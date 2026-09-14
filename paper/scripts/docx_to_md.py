@@ -1,9 +1,10 @@
-"""Convert thesis .docx to a diff-friendly Markdown snapshot.
+"""Import thesis .docx into the editable Markdown working draft.
 
 Usage: python paper/scripts/docx_to_md.py <input.docx> <output.md>
 
-The .docx remains the authoritative source; the .md is regenerated after
-each Word revision. Do not edit the .md by hand.
+thesis.docx is the only formal Word file; revise thesis.md first.
+Use this importer to align direct Word changes only after checking that
+the Markdown draft has no pending revisions that would be overwritten.
 """
 
 import re
@@ -21,8 +22,8 @@ STYLE_MAP = {
 }
 
 GENERATED_NOTE = (
-    '<!-- 本文件由 Word 正文自动生成，仅用于版本比对，请勿直接编辑；'
-    'Word 修订后运行 paper/scripts/docx_to_md.py 重新生成。 -->\n'
+    '<!-- 论文修订工作稿：内容修订先改本文件，再同步到唯一 Word 主文件 thesis.docx。'
+    '从 Word 重新导入前须核对本文件中的待同步修改，避免覆盖。 -->\n'
 )
 
 
