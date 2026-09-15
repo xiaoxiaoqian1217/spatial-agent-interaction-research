@@ -78,6 +78,7 @@ data/                       # 非敏感研究数据
 
 先按[任务走查草稿](research/interaction-walkthrough.md)探索执行中新增区域，记录实际困难，再收敛研究问题。
 情境到交互需求再到能力组合是候选机制，规则与交互 Agent 均为候选实现，暂不确定架构或核心创新。
+当前优先探索根据情境、已表达要求和尚未明确的信息组织交互，覆盖范围澄清、信息补充、影响检查、冲突处理及修改衔接，详见[机制草案](research/contextual-interaction-mechanism.md)。
 具体安排见[正文写作说明](paper/README.md)。
 
 - [x] 确定论文研究方向
