@@ -15,7 +15,7 @@
 ## 核心研究问题
 
 - **RQ1 — Task Situation Modeling**：哪些运行时上下文因素影响操作者的交互需求，以及如何组织为可用于交互决策的任务情境？
-- **RQ2 — Interaction Need Inference**：如何由当前任务情境识别操作者需要 Understand / Assess / Control / Verify 什么？
+- **RQ2 — Interaction Need Inference**：如何依据任务情境判断当前任务要求界面支持的理解、判断、控制和核查内容，显式需求表示相较直接策略映射有何价值？
 - **RQ3 — Dynamic Interaction Organization**：如何将交互需求转化为信息组织、空间可视化和 Mixed-Initiative 策略，并通过动态地图界面支持任务理解与人机协同？
 
 ## 论文结构
@@ -34,7 +34,7 @@
 - 异常、风险和 Agent 行为改变信息优先级；
 - 并非所有变化都需要人工介入；
 - 同一事件在不同约束和空间关系下可能对应不同交互需求；
-- “状态变化”与“用户此刻需要什么交互”之间缺少显式中间层。
+- 直接情境适配能否满足需要，以及显式需求表示是否带来额外收益，尚须在本文场景中比较。
 
 提出从 Runtime Context 经 Task Situation、Interaction Need 到 Interaction Strategy 的研究思路。
 
@@ -49,7 +49,8 @@
 1. 无人系统空间任务的 Context / Situation 表示；
 2. Situation → Interaction Need 的可解释推理机制；
 3. Need → Information / Spatial / Initiative 的动态交互组织方法；
-4. 可运行地图原型与分层验证。
+
+可运行地图原型与分层验证作为上述方法的支撑证据；组合方法或增加层次不自动构成创新。
 
 # 2 理论基础与相关研究
 
@@ -92,7 +93,7 @@
 | --- | --- |
 | Context 表示 | 是否覆盖任务、Agent、空间、事件、风险、决策和证据 |
 | Situation 识别 | 是否解释运行时状态与变化 |
-| Interaction Need | 是否显式推断用户此刻需要什么 |
+| Interaction Need | 是否表示任务导出的交互支持需求，是否评估该表示的增量价值 |
 | Dynamic UI | 是否动态调整信息、地图与操作 |
 | Initiative | 是否根据情境调整告知/建议/请求/确认 |
 | Validation | 是否有系统、专家或用户实验 |
@@ -141,7 +142,7 @@
 - Control；
 - Verify。
 
-说明多标签、优先级、冲突和无介入情境。
+说明多标签、优先级、冲突和无介入情境；此分类不是用户心理状态模型，也不等同于三级 SA。
 
 ## 3.6 两个重点案例
 
@@ -175,7 +176,7 @@ Context Facts
 → Evidence State
 ```
 
-第一阶段可采用有限状态、事件和规则组合，不把其限定为唯一算法。
+第一阶段采用上下文模型、有限状态、事件和规则组合，不使用 LLM；这些方法可跨情境识别、需求判断、策略选择及执行环节使用，不固定成一一对应的技术层。
 
 ## 4.3 Interaction Need Inference
 
@@ -193,7 +194,9 @@ Task Situation
 - 优先级；
 - 规则冲突；
 - 未匹配与证据不足；
-- 不应打扰用户的正常状态。
+- 不应打扰用户的正常状态；
+- 与直接规则映射比较需求层价值及额外复杂度；
+- 开发情境与独立保留情境的划分、标注分歧和反例。
 
 ## 4.4 Interaction Strategy
 
@@ -207,7 +210,7 @@ Task Situation
 
 ### 4.4.3 Initiative Management
 
-定义候选等级：
+定义本文原型的交互方式编号（不是标准自动化等级）：
 
 - I0 Observe；
 - I1 Inform；
@@ -215,7 +218,7 @@ Task Situation
 - I3 Request；
 - I4 Confirm。
 
-讨论 Mixed Initiative 与权限边界。
+分别记录发起方、交互方式、业务操作集合和执行权限；允许用户主动发起、修改、拒绝与 Agent 主动建议，避免把自动弹窗等同于 Mixed Initiative。
 
 ## 4.5 Dynamic Map Interaction
 
@@ -233,7 +236,7 @@ Task Situation
 
 ## 5.1 系统架构
 
-描述 Context 数据层、Situation/Need 推理层、Interaction Strategy 层和地图 UI 层。
+描述情境、需求、策略和地图界面的逻辑关系；规则与状态机可跨多个环节实现，逻辑表示不要求拆成多个服务或 Agent。
 
 ## 5.2 Context 与状态维护
 
@@ -245,7 +248,7 @@ Task Situation
 
 ## 5.4 地图动态组织实现
 
-实现视野、对象、区域、路径、风险和方案比较。
+实现视野、对象、区域、路径、风险和方案比较；保留用户选区/拖拽视野，提供恢复全局与取消入口，记录不必要视野切换。
 
 ## 5.5 Mixed-Initiative 交互实现
 
@@ -276,7 +279,7 @@ Task Situation
 - 规则冲突率；
 - 未匹配率；
 - Need 输出与专家标注一致性；
-- Initiative 等级与专家判断一致性。
+- 交互方式与专家判断一致性。
 
 ## 6.3 功能验证
 
@@ -284,17 +287,17 @@ Task Situation
 
 ## 6.4 专家评审
 
-检查 Context 因素、Need 分类、规则、主动权等级和地图信息是否符合任务与权限。
+检查 Context 因素、Need 分类、规则、主动交互方式和地图信息是否符合任务与权限。
 
 ## 6.5 用户对照实验
 
-### 基线
+### 条件与结论边界
 
-合理常规地图＋任务列表＋变化记录＋基本编辑和反馈。
+- B0：数据实时更新但交互组织固定的常规界面，保留必要信息、操作和告警。
+- B1：基于完整任务情境直接选策略的规则动态界面，不包含显式 Need 层。
+- P：同样情境与策略能力，经显式 Need 表示组织交互。
 
-### 本文方案
-
-在相同任务事实和后台能力下增加 Context/Situation 驱动的信息、地图重点和 Initiative 组织。
+先做独立情境上的 B1/P 策略及维护比较，再做小规模 B0/P 用户对照。前者评估需求层增量价值，后者评估整套动态组织效果。只有增加 B1/P 用户对照，才能归因需求层的用户收益。协议见[对照方案](../experiments/protocols/context-driven-comparison.md)。
 
 ### 指标
 
@@ -325,7 +328,7 @@ Task Situation
 - Context → Adaptive UI；
 - Situation → Need → Strategy → UI。
 
-讨论增加 Interaction Need 中间层带来的收益和复杂度。
+讨论增加 Interaction Need 中间层是否带来收益、何种收益及复杂度；允许无差异或不利结果，不能把内部架构差异直接解释成用户效果。
 
 ## 7.3 Mixed Initiative 的作用与边界
 
@@ -364,7 +367,7 @@ Task Situation
 
 - 先写问题、方法和证据，不预写实验结论；
 - 文献综述按问题线组织，不逐篇罗列；
-- 每项 UI 变化都应追溯到 Situation、Need 和 Strategy；
+- 主方案 UI 变化追溯到 Situation、Need 和 Strategy；直接映射基线追溯到 Situation 和 Strategy；
 - 规则/状态机是当前实现方案，不直接等同于论文创新；
 - Mixed Initiative 是 Interaction Strategy 的组成部分，不单独扩大为全文主题；
 - 两个重点案例用于验证，不代替整体研究对象。
